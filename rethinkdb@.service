@@ -1,0 +1,27 @@
+[Unit]
+Description=rethinkdb@%i service
+After=docker.service
+BindsTo=rethinkdb-discovery@%i.service
+
+[Service]
+EnvironmentFile=/etc/environment
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill rethinkdb%i
+ExecStartPre=-/usr/bin/docker rm rethinkdb%i
+ExecStartPre=-/usr/bin/mkdir -p /home/core/docker-volumes/rethinkdb
+ExecStartPre=/usr/bin/docker pull rethinkdb
+ExecStart=/bin/sh -c '/usr/bin/docker run --name rethinkdb%i   \
+    -p ${COREOS_PRIVATE_IPV4}:8080:8080                        \
+    -p ${COREOS_PRIVATE_IPV4}:28015:28015                      \
+    -p ${COREOS_PRIVATE_IPV4}:29015:29015                      \
+    -v /home/core/docker-volumes/rethinkdb/:/data/             \
+    rethinkdb rethinkdb --bind all --http-port 8080            \
+    --canonical-address ${COREOS_PRIVATE_IPV4}                 \
+    $(/usr/bin/etcdctl ls /announce/services |                 \
+        xargs -I {} /usr/bin/etcdctl get {} |                  \
+        sed s/^/"--join "/ | sed s/$/":29015"/ |               \
+        tr "\n" " ")'
+ExecStop=/usr/bin/docker stop rethinkdb%i
+
+[X-Fleet]
+X-ConditionMachineOf=rethinkdb-discovery@%i.service

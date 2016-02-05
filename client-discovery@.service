@@ -1,0 +1,11 @@
+[Unit]
+Description=Announce asintproj%i
+BindsTo=asintproj@%i.service
+After=asintproj@%i.service
+
+[Service]
+ExecStart=/bin/sh -c "sleep 10; while true; do etcdctl set /services/asintproj/upstream/asintproj%i \"$(sleep 5 && docker inspect -f '{{.NetworkSettings.IPAddress}}' asintproj%i):3000\" --ttl 60;sleep 45;done"
+ExecStop=/usr/bin/etcdctl rm /services/asintproj/upstream/asintproj%i
+
+[X-Fleet]
+MachineOf=asintproj@%i.service

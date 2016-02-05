@@ -1,0 +1,11 @@
+[Unit]
+Description=Announce redis%i
+BindsTo=redis@%i.service
+After=redis@%i.service
+
+[Service]
+ExecStart=/bin/sh -c "sleep 10; while true; do etcdctl set /services/redis/upstream/redis%i \"$(sleep 5 && docker inspect -f '{{.NetworkSettings.IPAddress}}' redis%i):6379\" --ttl 60;sleep 45;done"
+ExecStop=/usr/bin/etcdctl rm /services/redis/upstream/redis%i
+
+[X-Fleet]
+MachineOf=redis@%i.service

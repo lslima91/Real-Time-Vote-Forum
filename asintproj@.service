@@ -1,0 +1,15 @@
+[Unit]
+Description=asintproj%i
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill asintproj%i
+ExecStartPre=-/usr/bin/docker rm asintproj%i
+ExecStartPre=/usr/bin/docker pull lslima/asintproj
+ExecStart=/usr/bin/docker run -p 3000:3000 -e APPNAME=asintproj%i --name asintproj%i -P lslima/asintproj
+ExecStartPost=/usr/bin/sh -c "sleep 3 && curl -X PUT 46.101.75.177:2379/v2/keys/subdomains/client -d value=$(curl -s checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//'):$(/usr/bin/docker ps | grep 'asintproj' | grep -o '[0-9]\+->' | grep -o '[0-9]\+')"
+ExecStop=/usr/bin/docker kill asintproj%i
+
+[X-Fleet]
+Conflicts=asintproj*

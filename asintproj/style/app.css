@@ -1,0 +1,120 @@
+body {
+	/*padding-top: 90	px;*/
+	/*padding-bottom: 200px;*/
+}
+
+.navbar {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	transition: all 0.3s;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+	color:#bbb;
+}
+
+.navbar-shrink {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	opacity: 0.9;
+}
+
+.login-section {
+	padding-top: 100px;
+}
+
+.register-section {
+	padding-top: 100px;
+}
+
+.createpost-section {
+	padding-top: 100px;
+}
+
+.posts {
+	padding-top: 200px;
+	padding-bottom: 200px;
+}
+
+section {
+ 	/**/
+}
+
+.fill-screen {
+	background-size: cover;
+	background-position: center;
+}
+
+.content-filler {
+	text-align: center;
+	min-height: 500px;
+	background-position: center;
+}
+
+.diagram {
+	background-color: lightgrey;
+}
+
+.down-button i {
+	color: black;
+}
+
+.text-banner {
+	text-align: center;
+	padding-top: 100px;
+	padding-bottom: 100px;
+}
+
+.text-banner h1 {
+	font-size: 44px;
+}
+
+.text-banner p {
+	font-size: 18px;
+}
+
+.tools-section {
+	text-align: center;
+	background: lightgrey;
+}
+
+.tools-element {
+	/*border: 1px solid red;*/
+    height: auto;
+}
+
+.tools-element h2 {
+	font-size: 32px;
+}
+
+.tools-element p {
+	font-size: 18px;
+}
+
+.img-responsive {
+	margin: 0px auto ;
+}
+
+.api-section {
+	text-align: center;
+	background-color: lightgrey;
+}
+
+.comment-section {
+	padding-top: 100px;
+}
+.contact-me {
+	text-align: center;
+}
+
+footer {
+	background-color: #333;
+	color: #ddd;
+	padding: 20px;
+	text-align: center;
+}
+
+
+
+
+

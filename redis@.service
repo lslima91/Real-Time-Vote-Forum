@@ -1,0 +1,9 @@
+[Unit]
+Description=redis@i 
+After=docker.service
+
+[Service]
+ExecStart=/bin/bash -c '/usr/bin/docker run --name redis%i -p ${COREOS_PRIVATE_IPV4}:6379:6379 redis'
+ExecStop=/usr/bin/docker stop -t 3 redis%i
+
+

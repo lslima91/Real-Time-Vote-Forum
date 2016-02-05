@@ -1,0 +1,13 @@
+//rethinkdb admin portal
+ssh -fNTL localhost:8080:$(fleetctl ssh rethinkdb@3 "docker inspect --format '{{ .NetworkSettings.IPAddress }}' 36f05ce6911f"):8080 core@46.101.84.98
+
+//redis ips 
+fleetctl ssh instance_name "docker inspect --format '{{ .NetworkSettings.IPAddress }}' instance_name"
+
+//forward db query ip
+ssh -fNTL localhost:28015:$(fleetctl ssh rethinkdb@1 "docker inspect --format '{{ .NetworkSettings.IPAddress }}' rethinkdb1"):28015 core@46.101.1.193
+
+
+
+
+

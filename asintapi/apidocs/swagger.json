@@ -1,0 +1,754 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "ASINT Project",
+        "description": "API for clients to communicate with my news forum.",
+        "termsOfService": "www.lslima.me/terms/",
+        "contact": {
+            "name": "João Lima",
+            "email": "j.lima91@yahoo.com",
+            "url": "www.github.com/lslima91"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "http://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:4000",
+    "basePath": "/api",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "jwt": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "paths": {
+        "/authenticate": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Logs in",
+                "operationId": "logIn",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "login Infoc",
+                        "in": "body",
+                        "description": "Login Information",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user info response",
+                        "schema": {
+                            "$ref": "#/definitions/authResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/posts": {
+            "get": {
+                "tags": [
+                    "posts"
+                ],
+                "description": "Returns all posts from the server.",
+                "operationId": "getPosts",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "posts response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/post"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "posts"
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "description": "Creates a new post in the server.",
+                "operationId": "addPost",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Post payload.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/postcreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "post created response",
+                        "schema": {
+                            "$ref": "#/definitions/createdpost"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/posts/{pid}/upvotes": {
+            "post": {
+                "tags": [
+                    "posts"
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "description": "Upvotes post.",
+                "operationId": "upPost",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "pid",
+                        "in": "path",
+                        "description": "Post ID.",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "post upvoted response",
+                        "schema": {
+                            "$ref": "#/definitions/modifiedModel"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/posts/{pid}/downvotes": {
+            "post": {
+                "tags": [
+                    "posts"
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "description": "Downvotes post.",
+                "operationId": "downPost",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "pid",
+                        "in": "path",
+                        "description": "Post ID.",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "post downvoted response",
+                        "schema": {
+                            "$ref": "#/definitions/modifiedModel"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "tags": [
+                    "users"
+                ],
+                "description": "Logs in",
+                "operationId": "logn",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user created response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/usercreated"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{login}": {
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "description": "Creates user",
+                "operationId": "createUser",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "path",
+                        "description": "Desired login name.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "userinfo",
+                        "in": "body",
+                        "description": "Add user to the server.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user created response",
+                        "schema": {
+                            "$ref": "#/definitions/usercreatedResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "tags": [
+                    "users"
+                ],
+                "description": "Logs in",
+                "operationId": "login",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "path",
+                        "description": "ID of post where comment list was made.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user created response",
+                        "schema": {
+                            "$ref": "#/definitions/usercreated"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "description": "Deletes user",
+                "operationId": "deluser",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "path",
+                        "description": "Login ID of user to be deleted.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user deleted response",
+                        "schema": {
+                            "$ref": "#/definitions/defaultModel"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/comments/{pid}": {
+            "get": {
+                "tags": [
+                    "comments"
+                ],
+                "description": "Returns list of comments based on post id",
+                "operationId": "findCommentsByPostId",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "pid",
+                        "in": "path",
+                        "description": "ID of post where comment list was made",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "comment response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/comment"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "comments"
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "description": "Creates a new comment into the corresponding pid section.",
+                "operationId": "addComment",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "pid",
+                        "in": "path",
+                        "description": "Post identification .",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Comment payload.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/commentcreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment response",
+                        "schema": {
+                            "$ref": "#/definitions/comment"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/comments/{postId}/{commentId}": {
+            "delete": {
+                "tags": [
+                    "comments"
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "description": "Deletes user",
+                "operationId": "delcom",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "description": "Id of post where comment was made.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "description": "Unique ID of comment to be deleted.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "comment deleted response",
+                        "schema": {
+                            "$ref": "#/definitions/defaultModel"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "post": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "comments": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "pid": {
+                    "type": "number"
+                },
+                "upvotes": {
+                    "type": "number"
+                },
+                "downvotes": {
+                    "type": "number"
+                },
+                "submited": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                }
+            }
+        },
+        "postcreate": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string",
+                    "enum": [
+                        "News",
+                        "Games",
+                        "Videos",
+                        "Pics"
+                    ]
+                }
+            }
+        },
+        "comment": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "pid": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                }
+            }
+        },
+        "commentcreate": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                }
+            }
+        },
+        "user": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "authResponse": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "payload": {
+                    "type": "object",
+                    "$ref": "#/definitions/usercreated"
+                }
+            }
+        },
+        "login": {
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "usercreatedResponse": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "payload": {
+                    "type": "object",
+                    "$ref": "#/definitions/usercreated"
+                }
+            }
+        },
+        "usercreated": {
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "upvotelist": {
+                    "type": "string"
+                },
+                "downvotelist": {
+                    "type": "string"
+                },
+                "posts": {
+                    "type": "number"
+                },
+                "admin": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "createdpost": {
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                }
+            }
+        },
+        "defaultModel": {
+            "type": "object",
+            "required": [
+                "success",
+                "message"
+            ],
+            "properties": {
+                "success": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "modifiedModel": {
+            "type": "object",
+            "required": [
+                "code",
+                "operations"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "operations": {
+                    "type": "object",
+                    "properties": {
+                        "deleted": {
+                            "type": "string"
+                        },
+                        "errors": {
+                            "type": "string"
+                        },
+                        "inserted": {
+                            "type": "string"
+                        },
+                        "replaced": {
+                            "type": "string"
+                        },
+                        "skipped": {
+                            "type": "string"
+                        },
+                        "unchanged": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "errorModel": {
+            "type": "object",
+            "required": [
+                "code",
+                "message"
+            ],
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

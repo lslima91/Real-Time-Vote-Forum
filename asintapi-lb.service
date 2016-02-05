@@ -1,0 +1,13 @@
+[Unit]
+Description=asintapi-lb
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill asintapi-lb
+ExecStartPre=-/usr/bin/docker rm asintapi-lb
+ExecStartPre=/usr/bin/docker pull lslima/stickylb
+ExecStart=/usr/bin/sh -c "/usr/bin/docker run -e SERVICE_NAME=asintapi -e ETCD=\"$(ifconfig docker0 | awk '/\<inet\>/ { print $2}'):2379\" -P --name asintapi-lb lslima/stickylb"
+ExecStartPost=/usr/bin/sh -c "sleep 3 && curl -X PUT 46.101.75.177:2379/v2/keys/subdomains/asintapi -d value=$(curl -s checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//'):$(/usr/bin/docker ps | grep 'asintapi-lb' | grep -o '[0-9]\+->' | grep -o '[0-9]\+')"
+ExecStop=/usr/bin/docker stop asintapi-lb
+

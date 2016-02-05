@@ -1,0 +1,14 @@
+[Unit]
+Description=asintapi%i
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill asintapi%i
+ExecStartPre=-/usr/bin/docker rm asintapi%i
+ExecStartPre=/usr/bin/docker pull lslima/asintapi
+ExecStart=/usr/bin/docker run -p 4000:4000 -e APPNAME=asintapi%i --name asintapi%i -P lslima/asintapi
+ExecStop=/usr/bin/docker kill asintapi%i
+
+[X-Fleet]
+Conflicts=asintapi*

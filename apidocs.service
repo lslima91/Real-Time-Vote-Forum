@@ -1,0 +1,15 @@
+[Unit]
+Description=apidocs
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill apidocs
+ExecStartPre=-/usr/bin/docker rm apidocs
+ExecStartPre=/usr/bin/docker pull lslima/apidocs
+ExecStart=/usr/bin/docker run -p 8000:8000 -e APPNAME=apidocs --name apidocs -P lslima/apidocs
+ExecStartPost=/usr/bin/sh -c "sleep 3 && curl -X PUT 46.101.75.177:2379/v2/keys/subdomains/docs -d value=$(curl -s checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//'):$(/usr/bin/docker ps | grep 'apidocs' | grep -o '[0-9]\+->' | grep -o '[0-9]\+' | awk NR==2)"
+ExecStop=/usr/bin/docker kill apidocs
+
+
+

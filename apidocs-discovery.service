@@ -1,0 +1,12 @@
+[Unit]
+Description=Announce apidocs
+BindsTo=apidocs.service
+After=apidocs.service
+
+[Service]
+ExecStart=/bin/sh -c "sleep 10; while true; do etcdctl set /services/apidocs/upstream/apidocs \"$(sleep 5 && docker inspect -f '{{.NetworkSettings.IPAddress}}' apidocs):8000\" --ttl 60;sleep 45;done"
+ExecStop=/usr/bin/etcdctl rm /services/apidocs/upstream/apidocs
+
+[X-Fleet]
+MachineOf=apidocs.service
+

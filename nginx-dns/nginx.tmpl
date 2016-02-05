@@ -1,0 +1,9 @@
+{{range gets "/subdomains/*"}}
+    server {
+      server_name {{base .Key}}.lslima.me;
+      location / {
+        proxy_pass http://{{.Value}};
+        proxy_redirect    off;
+      }
+    }
+{{end}}

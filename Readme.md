@@ -26,6 +26,9 @@ Project I made for my Distributed Systems course.
 3-Database:
 - [x] RethinkDB
 
+4-API Docs:
+- [x] Swagger
+
 4-Scalability:
 - [x] Docker
 - [x] CoreOs
